@@ -6,5 +6,6 @@ namespace BookManagementSystem.Service.Interfaces
     {
         UserManagementService userManagementService { get; }
         TokenService tokenService { get; }
+        EmailManagerService mailService { get; }
     }
 }

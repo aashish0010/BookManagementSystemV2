@@ -1,4 +1,5 @@
 using BookManagementSystem;
+using BookManagementSystem.Domain.Entities;
 using BookManagementSystem.Infrastructure;
 using BookManagementSystem.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,6 +29,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddControllers();
 builder.Services.AddOpenApiDocument();
 

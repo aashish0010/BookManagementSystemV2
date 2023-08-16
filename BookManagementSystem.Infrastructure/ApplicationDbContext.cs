@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using BookManagementSystem.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,7 +7,11 @@ namespace BookManagementSystem.Infrastructure
 {
     public class ApplicationDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
+        }
+
+        public DbSet<OtpHandler> OtpManager { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -21,6 +26,14 @@ namespace BookManagementSystem.Infrastructure
                .HasMaxLength(100);
             builder.Entity<User>().Property(x => x.IsActive)
                .HasMaxLength(1);
+
+            builder.Entity<OtpHandler>().Property(x => x.IsVerify)
+               .HasMaxLength(1);
+            builder.Entity<OtpHandler>().Property(x => x.Email)
+               .HasMaxLength(50);
+            builder.Entity<OtpHandler>().Property(x => x.Otp)
+                .HasMaxLength(50);
+            builder.Entity<OtpHandler>().HasKey(x => x.Id);
         }
     }
     public class User : IdentityUser

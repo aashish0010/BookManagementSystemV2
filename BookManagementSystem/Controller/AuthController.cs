@@ -1,7 +1,6 @@
 ﻿using BookManagementSystem.Domain.DTO;
 using BookManagementSystem.Domain.Entities;
 using BookManagementSystem.Service.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookManagementSystem.Controller
@@ -35,12 +34,27 @@ namespace BookManagementSystem.Controller
             }
             return BadRequest(result);
         }
-        [Authorize]
         [HttpGet("getecho")]
         public IActionResult Test()
         {
 
-            return Ok(_unitOfWork.tokenService.UserName);
+            return Ok("I am alive");
+        }
+        [HttpGet("sendopt")]
+        public async Task<IActionResult> SendOpt(string email)
+        {
+            var result = await _unitOfWork.userManagementService.OtpManager(email);
+            if (result.Status == Level.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpPost("verifyopt")]
+        public async Task<IActionResult> VerifyOpt()
+        {
+
+            return Ok();
         }
     }
 }
