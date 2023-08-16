@@ -74,11 +74,13 @@ namespace BookManagementSystem.Service.Services
                 otp, user.UserName);
 
             mail.ToEmail = email;
-            OtpHandler handler = new OtpHandler();
-            handler.Email = email;
-            handler.Otp = otp;
-            handler.CreateDate = DateTime.UtcNow;
-            handler.IsVerify = "p";
+            OtpHandler handler = new OtpHandler()
+            {
+                Email = email,
+                Otp = otp,
+                CreateDate = DateTime.UtcNow,
+                IsVerify = "p"
+            };
 
             await _context.OtpManager.AddAsync(handler);
             int issave = await _context.SaveChangesAsync();
@@ -88,7 +90,6 @@ namespace BookManagementSystem.Service.Services
                 return new OptResponse()
                 {
                     Email = email,
-                    Otp = otp,
                     Message = "Opt Obtained Successfully",
                     Code = StatusCodes.Status200OK
 

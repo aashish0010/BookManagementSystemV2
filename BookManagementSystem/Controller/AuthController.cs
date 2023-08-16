@@ -51,7 +51,7 @@ namespace BookManagementSystem.Controller
             return BadRequest(result);
         }
         [HttpPost("verifyopt")]
-        public async Task<IActionResult> VerifyOpt()
+        public async Task<IActionResult> VerifyOpt(OtpVerifyRequest request)
         {
 
             return Ok();

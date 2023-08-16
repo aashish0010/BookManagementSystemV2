@@ -8,5 +8,7 @@ namespace BookManagementSystem.Service.Interfaces
         Task<Common> Register(RegisterRequest register);
         Task<LoginResponse> Login(LoginRequest login);
         Task<OptResponse> OtpManager(string email);
+        Task<Common> OtpVerify(OtpVerifyRequest request);
+        Task<Common> UpdatePassword();
     }
 }
