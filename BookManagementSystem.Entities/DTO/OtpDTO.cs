@@ -11,5 +11,6 @@ namespace BookManagementSystem.Domain.DTO
         public string Email { get; set; }
 
         public string Otp { get; set; }
+
     }
 }
