@@ -9,6 +9,6 @@ namespace BookManagementSystem.Service.Interfaces
         Task<LoginResponse> Login(LoginRequest login);
         Task<OptResponse> OtpManager(string email);
         Task<Common> OtpVerify(OtpVerifyRequest request);
-        Task<Common> UpdatePassword();
+        Task<Common> UpdatePassword(OptValidateRequest validateRequest);
     }
 }
