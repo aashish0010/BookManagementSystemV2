@@ -73,9 +73,13 @@ namespace BookManagementSystem.Service.Services
             mail.Body = Helper.EmailHelper("Book Management System",
                 otp, user.UserName);
 
+            Random ran = new Random();
+
             mail.ToEmail = email;
+            string processid = ran.Next(100000, 10000000).ToString();
             OtpHandler handler = new OtpHandler()
             {
+                ProcessId= processid,
                 Email = email,
                 Otp = otp,
                 CreateDate = DateTime.UtcNow,
@@ -89,6 +93,7 @@ namespace BookManagementSystem.Service.Services
                 await _emailManagerService.SendEmail(mail);
                 return new OptResponse()
                 {
+                    ProcessId= processid,
                     Email = email,
                     Message = "Opt Obtained Successfully",
                     Code = StatusCodes.Status200OK
@@ -108,7 +113,12 @@ namespace BookManagementSystem.Service.Services
 
         }
 
-        public async Task<Common> Register(RegisterRequest register)
+		public Task<Common> OtpVerify(OtpVerifyRequest request)
+		{
+            return null;
+		}
+
+		public async Task<Common> Register(RegisterRequest register)
         {
             var ifuserexits = await _userManager.FindByNameAsync(register.UserName);
             if (ifuserexits != null)
@@ -142,5 +152,10 @@ namespace BookManagementSystem.Service.Services
                 };
             }
         }
-    }
+
+		public Task<Common> UpdatePassword(OptValidateRequest validateRequest)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }
