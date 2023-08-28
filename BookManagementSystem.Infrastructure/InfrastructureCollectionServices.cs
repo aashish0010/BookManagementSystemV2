@@ -5,21 +5,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BookManagementSystem.Infrastructure
 {
-    public static class InfrastructureCollectionServices
-    {
-        public static IServiceCollection InfrastructureServices(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-
-
-            services.AddIdentityCore<User>().AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
-
-
-
-
-            return services;
-        }
-    }
+	public static class InfrastructureCollectionServices
+	{
+		public static IServiceCollection InfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+		{
+			services.AddDbContext<ApplicationDbContext>(options =>
+					options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+			services.AddIdentityCore<User>().AddRoles<IdentityRole>()
+			.AddEntityFrameworkStores<ApplicationDbContext>();
+			return services;
+		}
+	}
 }
