@@ -5,6 +5,7 @@ using BookManagementSystem.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace BookManagementSystem.Service.Services
@@ -18,9 +19,13 @@ namespace BookManagementSystem.Service.Services
 		private readonly IOptions<MailSettings> _mailSettings;
 		private readonly ApplicationDbContext _context;
 		private readonly RoleManager<IdentityRole> _roleManager;
+		private readonly ILogger<User> _logger;
 		public UnitOfWork(UserManager<User> userManager, IOptions<MailSettings> mailSettings,
 			IHttpContextAccessor httpContextAccessor, IMapper mapper
-			, IConfiguration configuration, ApplicationDbContext context, RoleManager<IdentityRole> roleManager)
+			, IConfiguration configuration,
+			ApplicationDbContext context,
+			RoleManager<IdentityRole> roleManager,
+			ILogger<User> logger)
 		{
 			_userManager = userManager;
 			_mapper = mapper;
@@ -29,12 +34,13 @@ namespace BookManagementSystem.Service.Services
 			_mailSettings = mailSettings;
 			_context = context;
 			_roleManager = roleManager;
+			_logger = logger;
 		}
 		public TokenService tokenService => new TokenService(_configuration, _httpContextAccessor);
 
 		public UserManagementService userManagementService =>
 			new UserManagementService(_userManager, _mapper,
-				tokenService, mailService, _context, _roleManager);
+				tokenService, mailService, _context, _roleManager, _logger);
 
 		public EmailManagerService mailService => new EmailManagerService(_mailSettings);
 	}

@@ -1,7 +1,6 @@
 ﻿using BookManagementSystem.Infrastructure;
 using BookManagementSystem.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -23,8 +22,9 @@ namespace BookManagementSystem.Service.Services
 		public string UserName => _httpContextAccessor.HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.Name);
 
 		public string Email => _httpContextAccessor.HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.Email);
+		public string Role => _httpContextAccessor.HttpContext.User.FindFirstValue("Role");
 
-		public string TokenGenerate(User user, IdentityRole role)
+		public string TokenGenerate(User user, string role)
 		{
 			var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
 			var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -32,7 +32,7 @@ namespace BookManagementSystem.Service.Services
 				new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
 				new Claim(JwtRegisteredClaimNames.Email, user.Email),
 				new Claim(JwtRegisteredClaimNames.Name, user.UserName),
-				new Claim("Role", role.Name),
+				new Claim("Role", role),
 				new Claim("DateOfJoining", DateTime.UtcNow.ToString()),
 				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
 			};
@@ -41,7 +41,6 @@ namespace BookManagementSystem.Service.Services
 			  claims,
 			  expires: DateTime.Now.AddMinutes(60),
 			  signingCredentials: credentials);
-
 			return new JwtSecurityTokenHandler().WriteToken(token);
 		}
 	}

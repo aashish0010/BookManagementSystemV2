@@ -6,6 +6,7 @@ using BookManagementSystem.Service.Function;
 using BookManagementSystem.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using System.Data;
 
 namespace BookManagementSystem.Service.Services
@@ -18,11 +19,13 @@ namespace BookManagementSystem.Service.Services
 		private readonly IEmailManagerService _emailManagerService;
 		private readonly ApplicationDbContext _context;
 		private readonly RoleManager<IdentityRole> _identityRole;
+		private readonly ILogger<User> _logger;
 		public UserManagementService(UserManager<User> userManager,
 			IMapper mapper, ITokenService token,
 			IEmailManagerService emailManagerService,
 			ApplicationDbContext context,
-			RoleManager<IdentityRole> identityRole
+			RoleManager<IdentityRole> identityRole,
+			ILogger<User> logger
 			)
 		{
 			_userManager = userManager;
@@ -31,6 +34,7 @@ namespace BookManagementSystem.Service.Services
 			_emailManagerService = emailManagerService;
 			_context = context;
 			_identityRole = identityRole;
+			_logger = logger;
 		}
 		public async Task<LoginResponse> Login(LoginRequest login)
 		{
@@ -38,18 +42,19 @@ namespace BookManagementSystem.Service.Services
 			User user = await _userManager.FindByNameAsync(login.UserName);
 			if (user == null)
 			{
+				_logger.LogInformation("Unable to Find User");
 				response.Code = StatusCodes.Status404NotFound;
 				response.Status = Level.Failed;
 				response.Message = "Unable to Find User";
 			}
 			else if (await _userManager.CheckPasswordAsync(user, login.Password))
 			{
-				var role = await _identityRole.FindByNameAsync(user.UserName);
+				var role = await _userManager.GetRolesAsync(user);
 				response.Code = StatusCodes.Status200OK;
 				response.Status = Level.Success;
 				response.Message = "Login SuccessFully";
 				response.UserName = login.UserName;
-				response.Token = _token.TokenGenerate(user, role);
+				response.Token = _token.TokenGenerate(user, role.FirstOrDefault());
 
 			}
 			else

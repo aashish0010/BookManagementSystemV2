@@ -2,10 +2,10 @@
 
 namespace BookManagementSystem.Service.Interfaces
 {
-    public interface IUnitOfWork
-    {
-        UserManagementService userManagementService { get; }
-        TokenService tokenService { get; }
-        EmailManagerService mailService { get; }
-    }
+	public interface IUnitOfWork
+	{
+		UserManagementService userManagementService { get; }
+		TokenService tokenService { get; }
+		EmailManagerService mailService { get; }
+	}
 }

@@ -4,11 +4,11 @@ using BookManagementSystem.Infrastructure;
 
 namespace BookManagementSystem
 {
-    public class AutoMapperManager : Profile
-    {
-        public AutoMapperManager()
-        {
-            CreateMap<RegisterRequest, User>();
-        }
-    }
+	public class AutoMapperManager : Profile
+	{
+		public AutoMapperManager()
+		{
+			CreateMap<RegisterRequest, User>();
+		}
+	}
 }
