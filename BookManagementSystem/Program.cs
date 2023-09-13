@@ -16,6 +16,7 @@ var logger = new LoggerConfiguration()
 		.CreateLogger();
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
+builder.Host.UseSerilog(logger);
 
 
 builder.Services.AddAutoMapper(typeof(Program));
@@ -65,7 +66,6 @@ var app = builder.Build();
 app.UseOpenApi();
 
 app.UseSerilogRequestLogging();
-
 
 app.UseSwaggerUi3(x =>
 	{
