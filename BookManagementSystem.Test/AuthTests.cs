@@ -82,9 +82,9 @@ namespace BookManagementSystem.Test
 			var unitofwork = new Mock<IUnitOfWork>();
 			var registerrepo = new Mock<IUserManagementService>();
 
-			var registerrepov2 = new UserManagementService(userManagerMock.Object, _mapper, tokenServiceMock.Object, emailManagerServiceMock.Object, contextMock.Object, roleManager);
+			//var registerrepov2 = new UserManagementService(userManagerMock.Object, _mapper, tokenServiceMock.Object, emailManagerServiceMock.Object, contextMock.Object, roleManager);
 
-			unitofwork.Setup(u => u.userManagementService).Returns(registerrepov2);
+			//unitofwork.Setup(u => u.userManagementService).Returns(registerrepov2);
 
 			var controller = new AuthController(unitofwork.Object);
 

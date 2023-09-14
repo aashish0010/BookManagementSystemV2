@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230816170128_otp")]
-    partial class otp
+    [Migration("20230914051545_office")]
+    partial class office
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,6 +48,9 @@ namespace BookManagementSystem.Infrastructure.Migrations
                     b.Property<string>("Otp")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ProcessId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
