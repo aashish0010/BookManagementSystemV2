@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BookManagementSystem.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class office : Migration
+    public partial class latestupdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

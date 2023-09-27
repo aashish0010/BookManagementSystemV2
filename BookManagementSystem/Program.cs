@@ -3,12 +3,10 @@ using BookManagementSystem.Domain.Entities;
 using BookManagementSystem.Infrastructure;
 using BookManagementSystem.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
 using NSwag.Generation.Processors.Security;
 using Serilog;
 using StackExchange.Profiling;
-using StackExchange.Profiling.SqlFormatters;
 using StackExchange.Profiling.Storage;
 using System.Text;
 
@@ -21,14 +19,15 @@ var logger = new LoggerConfiguration()
 
 builder.Services.AddMemoryCache();
 //builder.Services.AddEntityFrameworkSqlite().AddDbContext<ApplicationDbContext>();
-builder.Services.AddMiniProfiler(options => {
+builder.Services.AddMiniProfiler(options =>
+{
 	options.RouteBasePath = "/profiler";
 	options.Storage = new SqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"));
-    options.IgnoredPaths.Add("/css");
-    options.IgnoredPaths.Add("/js");
-    options.IgnoredPaths.Add("/index.html");
-    options.ShouldProfile = request => request.Path.StartsWithSegments("/api");
-    options.TrackConnectionOpenClose = false;
+	options.IgnoredPaths.Add("/css");
+	options.IgnoredPaths.Add("/js");
+	options.IgnoredPaths.Add("/index.html");
+	options.ShouldProfile = request => request.Path.StartsWithSegments("/api");
+	options.TrackConnectionOpenClose = false;
 }).AddEntityFramework();
 builder.Services.AddControllers();
 
@@ -36,9 +35,11 @@ builder.Services.AddControllers();
 
 
 var storage = new SqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"));
+
+
 foreach (var cs in storage.TableCreationScripts)
 {
-    Console.WriteLine(cs);
+	Console.WriteLine(cs);
 }
 
 
