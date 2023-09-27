@@ -174,6 +174,64 @@ namespace BookManagementSystem.Service.Services
                 };
             }
         }
+
+        public async Task<Common> ResitPassword(ChangePassword changePassword)
+        {
+            var isemailexits = await _userManager.FindByEmailAsync(changePassword.Email);
+            if (isemailexits != null)
+            {
+                var isvalid = _context.OtpManager.Where(x => x.Email.Equals(isemailexits.Email)
+                && x.IsVerify.Equals("P") && x.CreateDate.AddMinutes(20) > DateTime.UtcNow
+                && x.ProcessId.Equals(changePassword.ProcessId)
+                );
+                if (isvalid != null)
+                {
+
+                    var ispasswordchange = await _userManager.ChangePasswordAsync(isemailexits, changePassword.NewPassword, changePassword.OldPassword);
+                    if (ispasswordchange.Succeeded)
+                    {
+                        return new Common
+                        {
+                            Code = StatusCodes.Status200OK,
+                            Status = Level.Success,
+                            Message = "Password Reset Successfully"
+                        };
+                    }
+                    else
+                    {
+                        return new Common
+                        {
+                            Code = StatusCodes.Status400BadRequest,
+                            Status = Level.Failed,
+                            Message = "Password Not Matched"
+                        };
+                    }
+
+
+                }
+                else
+                {
+                    return new Common
+                    {
+                        Code = StatusCodes.Status404NotFound,
+                        Status = Level.Failed,
+                        Message = "Opt Doesnot Match"
+
+                    };
+                }
+            }
+            else
+            {
+                return new Common
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = Level.Failed,
+                    Message = "Unable to find email"
+                };
+            }
+        }
+
+
         public async Task<Common> UpdatePassword(OptValidateRequest validateRequest)
         {
             var isemailexits = await _userManager.FindByEmailAsync(validateRequest.Email);

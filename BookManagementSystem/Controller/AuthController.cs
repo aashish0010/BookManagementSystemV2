@@ -11,15 +11,16 @@ namespace BookManagementSystem.Controller
     public class AuthController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+
         public AuthController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
+
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest register)
         {
-
-            using (MiniProfiler.Current.Step("SendTransaction"))
+            using (MiniProfiler.Current.Step("Test2"))
             {
                 var result = await _unitOfWork.userManagementService.Register(register);
                 if (result.Status == Level.Success)
@@ -27,8 +28,8 @@ namespace BookManagementSystem.Controller
 
                 return BadRequest(result);
             }
-
         }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest login)
         {
@@ -37,12 +38,13 @@ namespace BookManagementSystem.Controller
                 return Ok(result);
             return BadRequest(result);
         }
+
         [HttpGet("getecho")]
         public IActionResult Test()
         {
-
             return Ok("I am alive");
         }
+
         [HttpGet("sendopt")]
         public async Task<IActionResult> SendOpt(string email)
         {
@@ -51,10 +53,20 @@ namespace BookManagementSystem.Controller
                 return Ok(result);
             return BadRequest(result);
         }
+
         [HttpPost("verifyopt")]
         public async Task<IActionResult> VerifyOpt(OptValidateRequest request)
         {
             var result = await _unitOfWork.userManagementService.UpdatePassword(request);
+            if (result.Status == Level.Success)
+                return Ok(result);
+            return BadRequest(result);
+        }
+
+        [HttpPost("changepassword")]
+        public async Task<IActionResult> ChangePassword(ChangePassword password)
+        {
+            var result = await _unitOfWork.userManagementService.ResitPassword(password);
             if (result.Status == Level.Success)
                 return Ok(result);
             return BadRequest(result);

@@ -1,4 +1,5 @@
-﻿using BookManagementSystem.Service.Services;
+﻿using BookManagementSystem.Infrastructure;
+using BookManagementSystem.Service.Services;
 
 namespace BookManagementSystem.Service.Interfaces
 {
@@ -7,5 +8,6 @@ namespace BookManagementSystem.Service.Interfaces
 		UserManagementService userManagementService { get; }
 		TokenService tokenService { get; }
 		EmailManagerService mailService { get; }
-	}
+        DbHelperService dbHelperService { get; }
+    }
 }

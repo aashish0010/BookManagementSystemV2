@@ -28,7 +28,7 @@ builder.Services.AddMiniProfiler(options => {
     options.IgnoredPaths.Add("/js");
     options.IgnoredPaths.Add("/index.html");
     options.ShouldProfile = request => request.Path.StartsWithSegments("/api");
-    options.TrackConnectionOpenClose = false;
+    options.TrackConnectionOpenClose = true;
 }).AddEntityFramework();
 builder.Services.AddControllers();
 
@@ -60,10 +60,9 @@ builder.Services.AddAuthentication(options =>
 	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
 	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
-
-}).AddJwtBearer(options =>
+}).AddJwtBearer(o =>
 {
-	options.TokenValidationParameters = new TokenValidationParameters
+	o.TokenValidationParameters = new TokenValidationParameters
 	{
 		ValidateIssuer = true,
 		ValidateAudience = true,
