@@ -10,7 +10,7 @@ using Microsoft.Extensions.Options;
 
 namespace BookManagementSystem.Service.Services
 {
-	public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
 	{
 		private readonly UserManager<User> _userManager;
 		private readonly IMapper _mapper;
@@ -43,5 +43,7 @@ namespace BookManagementSystem.Service.Services
 				tokenService, mailService, _context, _roleManager, _logger);
 
 		public EmailManagerService mailService => new EmailManagerService(_mailSettings);
-	}
+
+        public DbHelperService dbHelperService => new DbHelperService(_configuration);
+    }
 }

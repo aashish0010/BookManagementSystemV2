@@ -1,15 +1,3 @@
-using BookManagementSystem;
-using BookManagementSystem.Domain.Entities;
-using BookManagementSystem.Infrastructure;
-using BookManagementSystem.Service;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using NSwag.Generation.Processors.Security;
-using Serilog;
-using StackExchange.Profiling;
-using StackExchange.Profiling.Storage;
-using System.Text;
-
 var builder = WebApplication.CreateBuilder(args);
 
 var logger = new LoggerConfiguration()
@@ -61,10 +49,9 @@ builder.Services.AddAuthentication(options =>
 	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
 	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
-
-}).AddJwtBearer(options =>
+}).AddJwtBearer(o =>
 {
-	options.TokenValidationParameters = new TokenValidationParameters
+	o.TokenValidationParameters = new TokenValidationParameters
 	{
 		ValidateIssuer = true,
 		ValidateAudience = true,
