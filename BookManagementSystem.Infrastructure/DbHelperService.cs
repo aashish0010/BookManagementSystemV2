@@ -25,16 +25,12 @@ namespace BookManagementSystem.Infrastructure
         //    return new StackExchange.Profiling.Data.ProfiledDbConnection(conn, MiniProfiler.Current);
         //    //conn.Open();
         //    //return conn;
-         
         //}
-
-        
-
         public async Task<IEnumerable<T>> ExecuteQuery<T>(string sql,DynamicParameters param=null,bool isproc=false)
         {
             DbConnection conn = GetConn();
             return await conn.QueryAsync<T>(sql, param, commandType: (isproc) ? CommandType.StoredProcedure : CommandType.Text);
-           
+
         }
         public void Execute(string sql, DynamicParameters param = null, bool isproc = false)
         {
