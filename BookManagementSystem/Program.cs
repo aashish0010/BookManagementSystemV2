@@ -1,14 +1,3 @@
-using BookManagementSystem;
-using BookManagementSystem.Domain.Entities;
-using BookManagementSystem.Infrastructure;
-using BookManagementSystem.Service;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using NSwag.Generation.Processors.Security;
-using Serilog;
-using StackExchange.Profiling.Storage;
-using System.Text;
-
 var builder = WebApplication.CreateBuilder(args);
 
 var logger = new LoggerConfiguration()
@@ -21,14 +10,20 @@ builder.Services.AddMemoryCache();
 builder.Services.AddMiniProfiler(options =>
 {
 	options.RouteBasePath = "/profiler";
+	options.SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter();
 	options.Storage = new SqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"));
 	options.IgnoredPaths.Add("/css");
 	options.IgnoredPaths.Add("/js");
 	options.IgnoredPaths.Add("/index.html");
-	options.ShouldProfile = request => request.Path.StartsWithSegments("/api");
+	options.TrackConnectionOpenClose = true;// (Optional) You can disable "Connection Open()", "Connection Close()" (and async variant) tracking.
+											// (defaults to true, and connection opening/closing is tracked)
+
 	options.TrackConnectionOpenClose = false;
+	options.ShouldProfile = request => Helper.ShouldProfile(request);
 }).AddEntityFramework();
 builder.Services.AddControllers();
+
+
 
 
 
