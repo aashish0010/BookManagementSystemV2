@@ -1,7 +1,7 @@
 ﻿using BookManagementSystem.Domain.Entities;
 using Newtonsoft.Json;
 
-namespace BookManagementSystem
+namespace BookManagementSystem.Configuration
 {
 	public class ErrorHandlerMiddleWare
 	{

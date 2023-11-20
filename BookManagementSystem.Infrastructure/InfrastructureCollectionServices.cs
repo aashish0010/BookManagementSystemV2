@@ -12,7 +12,9 @@ namespace BookManagementSystem.Infrastructure
 			services.AddDbContext<ApplicationDbContext>(options =>
 					options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 			services.AddIdentityCore<User>().AddRoles<IdentityRole>()
-			.AddEntityFrameworkStores<ApplicationDbContext>();
+			.AddEntityFrameworkStores<ApplicationDbContext>()
+			.AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
+
 			return services;
 		}
 	}

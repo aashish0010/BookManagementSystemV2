@@ -12,6 +12,7 @@ namespace BookManagementSystem.Infrastructure
 		}
 
 		public DbSet<OtpHandler> OtpManager { get; set; }
+		public DbSet<ThirdPartyAuth> ThirdPartyLoginHandler { get; set; }
 
 
 		protected override void OnModelCreating(ModelBuilder builder)
@@ -20,12 +21,30 @@ namespace BookManagementSystem.Infrastructure
 
 			builder.Entity<User>().Property(x => x.PhoneNumber)
 			   .HasMaxLength(20);
-			builder.Entity<User>().Property(x => x.CreatedBy)
-			   .HasMaxLength(100);
+			//builder.Entity<User>().Property(x => x.CreatedBy)
+			//   .HasMaxLength(100);
 			builder.Entity<User>().Property(x => x.UpdatedBy)
+			   .HasMaxLength(100);
+			builder.Entity<User>().Property(x => x.ThirdPartyId)
+			   .HasMaxLength(100);
+			builder.Entity<User>().Property(x => x.FirstName)
+			   .HasMaxLength(100);
+			builder.Entity<User>().Property(x => x.MiddleName)
+			   .HasMaxLength(100);
+			builder.Entity<User>().Property(x => x.LastName)
 			   .HasMaxLength(100);
 			builder.Entity<User>().Property(x => x.IsActive)
 			   .HasMaxLength(1);
+
+			builder.Entity<ThirdPartyAuth>().Property(x => x.Username)
+			   .HasMaxLength(20);
+			builder.Entity<ThirdPartyAuth>().Property(x => x.UserId)
+			   .HasMaxLength(100);
+			builder.Entity<ThirdPartyAuth>().Property(x => x.Provider)
+			   .HasMaxLength(100);
+			builder.Entity<ThirdPartyAuth>().Property(x => x.UserEmail)
+			   .HasMaxLength(100);
+
 
 			builder.Entity<OtpHandler>().Property(x => x.IsVerify)
 			   .HasMaxLength(1);
@@ -38,8 +57,12 @@ namespace BookManagementSystem.Infrastructure
 	}
 	public class User : IdentityUser
 	{
+		public string FirstName { get; set; }
+		public string MiddleName { get; set; }
+		public string LastName { get; set; }
 		public DateTime Created { get; set; }
-		public string CreatedBy { get; set; } = DateTime.UtcNow.ToString();
+		public string ThirdPartyId { get; set; }
+		//	public string CreatedBy { get; set; } = DateTime.UtcNow.ToString();
 		public DateTime Updated { get; set; }
 		public string UpdatedBy { get; set; }
 		public string IsActive { get; set; }

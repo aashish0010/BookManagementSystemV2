@@ -1,45 +1,20 @@
+using BookManagementSystem.Configuration;
+using BookManagementSystem.Infrastructure;
+using BookManagementSystem.Service;
+using Serilog;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var logger = new LoggerConfiguration()
 		.ReadFrom.Configuration(builder.Configuration)
 		.Enrich.FromLogContext()
 		.CreateLogger();
-
-builder.Services.AddMemoryCache();
-//builder.Services.AddEntityFrameworkSqlite().AddDbContext<ApplicationDbContext>();
-builder.Services.AddMiniProfiler(options =>
-{
-	options.RouteBasePath = "/profiler";
-	options.SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter();
-	options.Storage = new SqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"));
-	options.IgnoredPaths.Add("/css");
-	options.IgnoredPaths.Add("/js");
-	options.IgnoredPaths.Add("/index.html");
-	options.TrackConnectionOpenClose = true;// (Optional) You can disable "Connection Open()", "Connection Close()" (and async variant) tracking.
-											// (defaults to true, and connection opening/closing is tracked)
-
-	options.TrackConnectionOpenClose = false;
-	options.ShouldProfile = request => Helper.ShouldProfile(request);
-}).AddEntityFramework();
-builder.Services.AddControllers();
-
-
-
-
-
-
-var storage = new SqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"));
-
-
-foreach (var cs in storage.TableCreationScripts)
-{
-	Console.WriteLine(cs);
-}
-
-
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
 builder.Host.UseSerilog(logger);
+
+
+builder.Services.ServiceHelpers(builder.Configuration);
 
 
 builder.Services.AddAutoMapper(typeof(Program));
@@ -50,44 +25,13 @@ builder.Services.ServiceServices(builder.Configuration);
 builder.Services.AddAuthorization();
 
 
-builder.Services.AddAuthentication(options =>
-{
-	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-}).AddJwtBearer(o =>
-{
-	o.TokenValidationParameters = new TokenValidationParameters
-	{
-		ValidateIssuer = true,
-		ValidateAudience = true,
-		ValidateLifetime = true,
-		ValidateIssuerSigningKey = true,
-		ValidIssuer = builder.Configuration["Jwt:Issuer"],
-		ValidAudience = builder.Configuration["Jwt:Issuer"],
-		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-	};
-});
-
-builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
-builder.Services.AddControllers();
-builder.Services.AddOpenApiDocument(document =>
-{
-	document.AddSecurity("JWT", Enumerable.Empty<string>(), new NSwag.OpenApiSecurityScheme
-	{
-		Type = NSwag.OpenApiSecuritySchemeType.ApiKey,
-		Name = "Authorization",
-		In = NSwag.OpenApiSecurityApiKeyLocation.Header,
-		Description = "Type into the TextBox : Bearer {your JWT Token}"
-	});
-	document.OperationProcessors.Add(
-		new AspNetCoreOperationSecurityScopeProcessor("JWT"));
-});
 
 
 
 var app = builder.Build();
 app.UseOpenApi();
+app.UseCors();
+
 
 app.UseSerilogRequestLogging();
 app.UseMiniProfiler();

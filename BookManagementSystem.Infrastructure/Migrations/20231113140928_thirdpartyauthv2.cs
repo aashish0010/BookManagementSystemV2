@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BookManagementSystem.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class latestupdate : Migration
+    public partial class thirdpartyauthv2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -72,6 +72,22 @@ namespace BookManagementSystem.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OtpManager", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ThirdPartyLoginHandler",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Provider = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ThirdPartyLoginHandler", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -240,6 +256,9 @@ namespace BookManagementSystem.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "OtpManager");
+
+            migrationBuilder.DropTable(
+                name: "ThirdPartyLoginHandler");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

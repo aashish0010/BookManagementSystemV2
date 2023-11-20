@@ -12,19 +12,19 @@ import { IconModule } from '@coreui/icons-angular';
 
 @NgModule({
   declarations: [
-    LoginComponent,
-    RegisterComponent,
-    Page404Component,
-    Page500Component
+    // LoginComponent,
+    // RegisterComponent,
+    // Page404Component,
+    // Page500Component
   ],
   imports: [
-    CommonModule,
-    PagesRoutingModule,
-    CardModule,
-    ButtonModule,
-    GridModule,
-    IconModule,
-    FormModule
+    // CommonModule,
+    // PagesRoutingModule,
+    // CardModule,
+    // ButtonModule,
+    // GridModule,
+    // IconModule,
+    // FormModule
   ]
 })
 export class PagesModule {

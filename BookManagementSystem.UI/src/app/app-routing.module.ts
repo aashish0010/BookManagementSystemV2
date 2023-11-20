@@ -6,16 +6,21 @@ import { Page404Component } from './views/pages/page404/page404.component';
 import { Page500Component } from './views/pages/page500/page500.component';
 import { LoginComponent } from './views/pages/login/login.component';
 import { RegisterComponent } from './views/pages/register/register.component';
+import { DashboardComponent } from './views/dashboard/dashboard.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'dashboard',
     redirectTo: 'dashboard',
     pathMatch: 'full'
   },
   {
-    path: '',
-    component: DefaultLayoutComponent,
+    path:'',
+    component:DefaultLayoutComponent
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
     data: {
       title: 'Home'
     },

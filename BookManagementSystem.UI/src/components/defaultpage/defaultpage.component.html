@@ -1,0 +1,9 @@
+<div class="main-content" *ngIf="isLoggedIn$ ; else loggedOut">
+  <div class="container-fluid">
+    <app-dashboard></app-dashboard>
+    
+</div>
+</div>
+<ng-template #loggedOut>
+  <app-login></app-login>
+</ng-template>

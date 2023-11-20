@@ -2,7 +2,7 @@
 using BookManagementSystem.Domain.DTO;
 using BookManagementSystem.Infrastructure;
 
-namespace BookManagementSystem
+namespace BookManagementSystem.Configuration
 {
 	public class AutoMapperManager : Profile
 	{

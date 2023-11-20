@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Text;
 
 namespace BookManagementSystem.Service.Function
 {
-    public static class Helper
-    {
-        public static string EmailHelper(string CompanyName, string Otp, string UserName)
-        {
-            return @"<!DOCTYPE HTML PUBLIC ""-//W3C//DTD XHTML 1.0 Transitional //EN"" ""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"">
+	public static class Helper
+	{
+		private readonly static Random _random = new Random();
+		public static string EmailHelper(string CompanyName, string Otp, string UserName)
+		{
+			return @"<!DOCTYPE HTML PUBLIC ""-//W3C//DTD XHTML 1.0 Transitional //EN"" ""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"">
                 <html xmlns=""http://www.w3.org/1999/xhtml"" xmlns:v=""urn:schemas-microsoft-com:vml"" xmlns:o=""urn:schemas-microsoft-com:office:office"">
                 <head>
                 <!--[if gte mso 9]>
@@ -443,13 +445,75 @@ namespace BookManagementSystem.Service.Function
                 </html>
                 ";
 
-        }
+		}
 
 
-        public static bool ShouldProfile(HttpRequest request)
-        {
-            return request.Path.StartsWithSegments("/api");
-        }
-    }
+		public static bool ShouldProfile(HttpRequest request)
+		{
+			return request.Path.StartsWithSegments("/api");
+		}
+
+		public static List<Tuple<string, string>> SplitStringBySpace(string stringtoSplit)
+		{
+			var returnstr = new List<Tuple<string, string>>();
+			if (string.IsNullOrEmpty(stringtoSplit)) return null;
+			var strings = stringtoSplit.Split(" ");
+			int count = strings.Count();
+
+			if (count == 1)
+			{
+				returnstr.Add(new Tuple<string, string>("FirstName", stringtoSplit));
+				return returnstr;
+			}
+			else if (count == 2)
+			{
+
+				returnstr.Add(new Tuple<string, string>("FirstName", strings[0]));
+				returnstr.Add(new Tuple<string, string>("LastName", strings[1]));
+				return returnstr;
+			}
+			else
+			{
+				returnstr.Add(new Tuple<string, string>("FirstName", strings[0]));
+				returnstr.Add(new Tuple<string, string>("MiddleName", strings[1]));
+				returnstr.Add(new Tuple<string, string>("LastName", strings[2]));
+				return returnstr;
+			}
+
+		}
+
+		public static string RandomPassword()
+		{
+			var passwordBuilder = new StringBuilder();
+
+			// 4-Letters lower case
+			passwordBuilder.Append(RandomString(4, true));
+
+			// 4-Digits between 1000 and 9999
+			passwordBuilder.Append(RandomNumber(1000, 9999));
+
+			// 2-Letters upper case
+			passwordBuilder.Append(RandomString(2));
+			return passwordBuilder.ToString();
+		}
+		private static int RandomNumber(int min, int max)
+		{
+			return _random.Next(min, max);
+		}
+		private static string RandomString(int size, bool lowerCase = false)
+		{
+			var builder = new StringBuilder(size);
+			char offset = lowerCase ? 'a' : 'A';
+			const int lettersOffset = 26; // A...Z or a..z: length=26
+
+			for (var i = 0; i < size; i++)
+			{
+				var @char = (char)_random.Next(offset, offset + lettersOffset);
+				builder.Append(@char);
+			}
+
+			return lowerCase ? builder.ToString() : builder.ToString();
+		}
+	}
 
 }
