@@ -10,5 +10,6 @@ namespace BookManagementSystem.Service.Interfaces
 		EmailManagerService mailService { get; }
         DbHelperService dbHelperService { get; }
 		CommonService commonService { get; }
+		ProductService productService { get; }
     }
 }

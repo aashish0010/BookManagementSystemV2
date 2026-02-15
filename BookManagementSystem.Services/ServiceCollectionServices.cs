@@ -3,6 +3,7 @@ using BookManagementSystem.Service.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+
 namespace BookManagementSystem.Service
 {
     public static class ServiceCollectionServices
@@ -11,6 +12,7 @@ namespace BookManagementSystem.Service
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICommonService, CommonService>();
+            services.AddScoped<IProductService, ProductService>();
             services.AddHttpContextAccessor();
             return services;
         }

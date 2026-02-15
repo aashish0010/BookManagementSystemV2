@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
+import { tap } from 'rxjs';
 
 import { IAuthNumberLoginState } from '../../interface/auth.interface';
 import { AuthService } from '../../services/auth.service';
@@ -43,15 +44,6 @@ export class AuthState {
   router = inject(Router);
   private authService = inject(AuthService);
 
-  //   ngxsOnInit(ctx: StateContext<AuthStateModel>) {
-  //   // Pre Fake Login (if you are using ap
-  //   ctx.patchState({
-  //     email: 'john.customer@example.com',
-  //     token: '',
-  //     access_token: '115|laravel_sanctum_mp1jyyMyKeE4qVsD1bKrnSycnmInkFXXIrxKv49w49d2a2c5'
-  //   })
-  // }
-
   @Selector()
   static accessToken(state: AuthStateModel): String | null {
     return state.access_token;
@@ -78,24 +70,41 @@ export class AuthState {
   }
 
   @Action(RegisterAction)
-  register(_ctx: StateContext<AuthStateModel>, _action: RegisterAction) {
-    // Register Logic Here
+  register(ctx: StateContext<AuthStateModel>, action: RegisterAction) {
+    return this.authService.register(action.payload).pipe(
+      tap({
+        next: () => {
+          void this.router.navigate(['/']);
+        },
+        error: (err) => {
+          console.error('Registration failed', err);
+        },
+      }),
+    );
   }
 
   @Action(LoginAction)
-  login(ctx: StateContext<AuthStateModel>, _action: LoginAction) {
-    // Login Logic Here
-    ctx.patchState({
-      email: 'john.customer@example.com',
-      token: '',
-      access_token: '115|laravel_sanctum_mp1jyyMyKeE4qVsD1bKrnSycnmInkFXXIrxKv49w49d2a2c5',
-    });
-    this.store.dispatch(new GetUserDetailsAction());
+  login(ctx: StateContext<AuthStateModel>, action: LoginAction) {
+    return this.authService.login(action.payload).pipe(
+      tap({
+        next: (res: any) => {
+          ctx.patchState({
+            email: action.payload.email,
+            token: res.token || '',
+            access_token: res.token || '',
+          });
+          this.store.dispatch(new GetUserDetailsAction());
+        },
+        error: (err) => {
+          console.error('Login failed', err);
+        },
+      }),
+    );
   }
 
   @Action(LoginWithNumberAction)
   loginWithNumber(_ctx: StateContext<AuthStateModel>, _action: LoginWithNumberAction) {
-    // Login Logic Here
+    // Login with number logic here
     this.store.dispatch(new GetUserDetailsAction());
   }
 
@@ -122,7 +131,6 @@ export class AuthState {
 
   @Action(LogoutAction)
   logout(_ctx: StateContext<AuthStateModel>) {
-    // Logout LOgic Here
     this.store.dispatch(new AuthClearAction());
     void this.router.navigate(['/']);
   }

@@ -1,8 +1,11 @@
 ﻿using BookManagementSystem.Domain.Entities;
 using BookManagementSystem.Domain.Entities.Company;
+using BookManagementSystem.Domain.Entities.Product;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Product = BookManagementSystem.Domain.Entities.Product.Product;
+using Category = BookManagementSystem.Domain.Entities.Product.Category;
 
 namespace BookManagementSystem.Infrastructure
 {
@@ -18,6 +21,8 @@ namespace BookManagementSystem.Infrastructure
         public DbSet<CompanyDetail> CompanyDetails { get; set; }
         public DbSet<CompanyService> CompanyServices { get; set; }
         public DbSet<CompanySocialInfo> CompanySocialInfos { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -118,6 +123,54 @@ namespace BookManagementSystem.Infrastructure
             builder.Entity<CompanySocialInfo>().Property(x => x.SocialMediaName).HasMaxLength(200).IsRequired();
             builder.Entity<CompanySocialInfo>().Property(x => x.SocialMediaDesc).HasMaxLength(200);
             builder.Entity<CompanySocialInfo>().HasOne(x => x.CompanyInfo).WithMany()
+                .HasForeignKey(x => x.CompanyInfoId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            #endregion
+
+            #region Category
+
+            builder.Entity<Category>().HasKey(x => x.Id);
+            builder.Entity<Category>().Property(x => x.Id).ValueGeneratedOnAdd();
+            builder.Entity<Category>().Property(x => x.Name).HasMaxLength(200).IsRequired();
+            builder.Entity<Category>().Property(x => x.Slug).HasMaxLength(200).IsRequired();
+            builder.Entity<Category>().Property(x => x.Description).HasMaxLength(500);
+            builder.Entity<Category>().Property(x => x.ImageUrl).HasMaxLength(500);
+            builder.Entity<Category>()
+                .HasOne(x => x.Parent)
+                .WithMany(x => x.SubCategories)
+                .HasForeignKey(x => x.ParentId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired(false);
+            builder.Entity<Category>()
+                .HasOne(x => x.CompanyInfo)
+                .WithMany()
+                .HasForeignKey(x => x.CompanyInfoId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            #endregion
+
+            #region Product
+
+            builder.Entity<Product>().HasKey(x => x.Id);
+            builder.Entity<Product>().Property(x => x.Id).ValueGeneratedOnAdd();
+            builder.Entity<Product>().Property(x => x.Name).HasMaxLength(300).IsRequired();
+            builder.Entity<Product>().Property(x => x.Slug).HasMaxLength(300).IsRequired();
+            builder.Entity<Product>().Property(x => x.ShortDescription).HasMaxLength(500);
+            builder.Entity<Product>().Property(x => x.Description).HasMaxLength(5000);
+            builder.Entity<Product>().Property(x => x.Price).HasColumnType("decimal(18,2)");
+            builder.Entity<Product>().Property(x => x.SalePrice).HasColumnType("decimal(18,2)");
+            builder.Entity<Product>().Property(x => x.SKU).HasMaxLength(100);
+            builder.Entity<Product>().Property(x => x.ImageUrl).HasMaxLength(500);
+            builder.Entity<Product>().Property(x => x.StockStatus).HasMaxLength(50);
+            builder.Entity<Product>()
+                .HasOne(x => x.Category)
+                .WithMany(x => x.Products)
+                .HasForeignKey(x => x.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Product>()
+                .HasOne(x => x.CompanyInfo)
+                .WithMany()
                 .HasForeignKey(x => x.CompanyInfoId)
                 .OnDelete(DeleteBehavior.Cascade);
 

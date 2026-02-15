@@ -120,87 +120,35 @@ export class ProductState {
       tap({
         next: (result: IProductModel) => {
           let products = result.data || [];
-          if (action?.payload) {
-            // Note:- For Internal filter purpose only, once you apply filter logic on server side then you can remove  it as per your requirement.
-            // Note:- we have covered only few filters as demo purpose
-            products = result.data.filter(
-              product =>
-                (action?.payload?.['store_slug'] &&
-                  product?.store?.slug == action?.payload?.['store_slug']) ||
-                (action?.payload?.['category'] &&
-                  product?.categories?.length &&
-                  product?.categories?.some(category =>
-                    action?.payload?.['category']?.split(',')?.includes(category.slug),
-                  )),
-            );
 
-            products = products.length ? products : result.data;
+          if (action?.payload) {
+            if (action?.payload?.['category']) {
+              products = products.filter(
+                product =>
+                  product?.categories?.length &&
+                  product.categories.some(category =>
+                    action?.payload?.['category']?.split(',')?.includes(category.slug),
+                  ),
+              );
+              products = products.length ? products : result.data;
+            }
 
             if (action?.payload?.['sortBy']) {
               if (action?.payload?.['sortBy'] === 'asc') {
-                products = products.sort((a, b) => {
-                  if (a.id < b.id) {
-                    return -1;
-                  } else if (a.id > b.id) {
-                    return 1;
-                  }
-                  return 0;
-                });
+                products = products.sort((a, b) => a.id - b.id);
               } else if (action?.payload?.['sortBy'] === 'desc') {
-                products = products.sort((a, b) => {
-                  if (a.id > b.id) {
-                    return -1;
-                  } else if (a.id < b.id) {
-                    return 1;
-                  }
-                  return 0;
-                });
+                products = products.sort((a, b) => b.id - a.id);
               } else if (action?.payload?.['sortBy'] === 'a-z') {
-                products = products.sort((a, b) => {
-                  if (a.name < b.name) {
-                    return -1;
-                  } else if (a.name > b.name) {
-                    return 1;
-                  }
-                  return 0;
-                });
+                products = products.sort((a, b) => a.name.localeCompare(b.name));
               } else if (action?.payload?.['sortBy'] === 'z-a') {
-                products = products.sort((a, b) => {
-                  if (a.name > b.name) {
-                    return -1;
-                  } else if (a.name < b.name) {
-                    return 1;
-                  }
-                  return 0;
-                });
+                products = products.sort((a, b) => b.name.localeCompare(a.name));
               } else if (action?.payload?.['sortBy'] === 'low-high') {
-                products = products.sort((a, b) => {
-                  if (a.sale_price < b.sale_price) {
-                    return -1;
-                  } else if (a.price > b.price) {
-                    return 1;
-                  }
-                  return 0;
-                });
+                products = products.sort((a, b) => (a.sale_price || a.price) - (b.sale_price || b.price));
               } else if (action?.payload?.['sortBy'] === 'high-low') {
-                products = products.sort((a, b) => {
-                  if (a.sale_price > b.sale_price) {
-                    return -1;
-                  } else if (a.price < b.price) {
-                    return 1;
-                  }
-                  return 0;
-                });
+                products = products.sort((a, b) => (b.sale_price || b.price) - (a.sale_price || a.price));
               }
-            } else if (!action?.payload?.['ids']) {
-              products = products.sort((a, b) => {
-                if (a.id < b.id) {
-                  return -1;
-                } else if (a.id > b.id) {
-                  return 1;
-                }
-                return 0;
-              });
+            } else {
+              products = products.sort((a, b) => a.id - b.id);
             }
 
             if (action?.payload?.['search']) {
@@ -208,18 +156,12 @@ export class ProductState {
                 product.name.toLowerCase().includes(action?.payload?.['search'].toLowerCase()),
               );
             }
-
-            if (action?.payload?.['brand']) {
-              products = products.filter(
-                product => product?.brand?.slug === action?.payload?.['brand'],
-              );
-            }
           }
 
           ctx.patchState({
             product: {
               data: products,
-              total: products.length ? products.length : result.data.length,
+              total: products.length ? products.length : result.data?.length || 0,
             },
           });
         },
@@ -227,6 +169,7 @@ export class ProductState {
           this.productService.skeletonLoader = false;
         },
         error: err => {
+          this.productService.skeletonLoader = false;
           throw new Error(err?.error?.message);
         },
       }),
@@ -254,30 +197,25 @@ export class ProductState {
   @Action(GetProductBySlugAction)
   getProductBySlug(ctx: StateContext<ProductStateModel>, { slug }: GetProductBySlugAction) {
     this.themeOptionService.preloader = true;
-    return this.productService.getProducts().pipe(
+    return this.productService.getProductBySlug(slug).pipe(
       tap({
-        next: results => {
-          if (results && results.data) {
-            const result = results.data.find(product => product.slug == slug)!;
+        next: (result: IProduct) => {
+          if (result) {
+            result.related_products = result.related_products?.length ? result.related_products : [];
+            result.cross_sell_products = result.cross_sell_products?.length ? result.cross_sell_products : [];
 
-            result.related_products =
-              result.related_products && result.related_products.length
-                ? result.related_products
-                : [];
-            result.cross_sell_products =
-              result.cross_sell_products && result.cross_sell_products.length
-                ? result.cross_sell_products
-                : [];
+            const ids = [...(result.related_products || []), ...(result.cross_sell_products || [])];
+            const categoryIds = result?.categories?.map(category => category.id) || [];
 
-            const ids = [...result.related_products, ...result.cross_sell_products];
-            const categoryIds = [...result?.categories?.map(category => category.id)];
-            this.store.dispatch(
-              new GetRelatedProductsAction({
-                ids: ids?.join(','),
-                category_ids: categoryIds?.join(','),
-                status: 1,
-              }),
-            );
+            if (ids.length || categoryIds.length) {
+              this.store.dispatch(
+                new GetRelatedProductsAction({
+                  ids: ids?.join(','),
+                  category_ids: categoryIds?.join(','),
+                  status: 1,
+                }),
+              );
+            }
 
             const state = ctx.getState();
             ctx.patchState({
@@ -290,6 +228,7 @@ export class ProductState {
           this.themeOptionService.preloader = false;
         },
         error: err => {
+          this.themeOptionService.preloader = false;
           void this.router.navigate(['/404']);
           throw new Error(err?.error?.message);
         },
@@ -328,7 +267,7 @@ export class ProductState {
           const state = ctx.getState();
 
           result.data.map(product => {
-            product['categories_ids'] = product?.categories?.map(category => category.id);
+            product['categories_ids'] = product?.categories?.map(category => category.id) || [];
           });
 
           let products = result.data.filter(product =>
@@ -453,7 +392,7 @@ export class ProductState {
           const state = ctx.getState();
 
           result.data.map(product => {
-            product['categories_ids'] = product.categories.map(category => category.id);
+            product['categories_ids'] = product?.categories?.map(category => category.id) || [];
           });
 
           let filteredProducts = result.data.filter(product =>
@@ -462,8 +401,8 @@ export class ProductState {
             ),
           );
 
-          const page = action.payload!['page']; // e.g., 1 for the first page
-          const itemsPerPage = action.payload!['paginate']; // e.g., 4 items per page
+          const page = action.payload!['page'];
+          const itemsPerPage = action.payload!['paginate'];
 
           const startIndex = (page - 1) * itemsPerPage;
           const endIndex = startIndex + itemsPerPage;

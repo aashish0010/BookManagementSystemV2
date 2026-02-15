@@ -50,5 +50,7 @@ namespace BookManagementSystem.Service.Services
         public DbHelperService dbHelperService => new DbHelperService(_configuration);
 
         public CommonService commonService => new CommonService(_context);
+
+        public ProductService productService => new ProductService(_context);
     }
 }

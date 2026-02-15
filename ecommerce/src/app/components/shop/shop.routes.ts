@@ -5,7 +5,6 @@ import { CheckoutGuard } from '../../core/guard/checkout.guard';
 import { BrandResolver } from '../../shared/resolver/brand.resolver';
 import { CategoryResolver } from '../../shared/resolver/category.resolver';
 import { ProductResolver } from '../../shared/resolver/product.resolver';
-import { StoreResolver } from '../../shared/resolver/store.resolver';
 
 export const shop: Routes = [
   {
@@ -37,22 +36,6 @@ export const shop: Routes = [
     path: 'checkout',
     loadComponent: () => import('./checkout/checkout').then(m => m.Checkout),
     canActivate: [CheckoutGuard],
-  },
-  {
-    path: 'seller/become-seller',
-    loadComponent: () => import('./seller/seller').then(m => m.Seller),
-  },
-  {
-    path: 'seller/stores',
-    loadComponent: () => import('./seller/seller-store/seller-store').then(m => m.SellerStore),
-  },
-  {
-    path: 'seller/store/:slug',
-    loadComponent: () =>
-      import('./seller/seller-details/seller-details').then(m => m.SellerDetails),
-    resolve: {
-      data: StoreResolver,
-    },
   },
   {
     path: 'order/tracking',
