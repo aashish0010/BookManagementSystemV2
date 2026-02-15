@@ -1250,9 +1250,8 @@ export interface IBooksContent {
   category_product: IProductTabSection;
   categories_2: IProductCategoryFashionFour;
   slider_products: ISliderProduct;
-  offer_banner: IFeaturedBannersFashionOne;
-  products_list: IProductList;
-  featured_blogs: IBlogSection;
+  products_list: IProductTabSection;
+  everyday_casual: IProductTabSection;
   brand: IBrands;
   products_ids: number[];
 }

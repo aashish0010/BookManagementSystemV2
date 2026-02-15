@@ -72,53 +72,39 @@
 }
 <!-- Parallax banner -->
 
-<!-- Banner Section Start -->
-<section class="pb-0 ratio2_1 banner-section">
-  <div class="container">
-    <div class="row g-sm-4 g-3">
-      @if(data()?.content?.offer_banner?.banner_1?.status){
-      <div class="{{ data()?.content?.offer_banner?.banner_2?.status ? 'col-md-6' : 'col-12' }}">
-        <app-image-link [image]="data()?.content?.offer_banner?.banner_1" [bgImage]="true" />
-      </div>
-      } @if(data()?.content?.offer_banner?.banner_2?.status){
-      <div class="{{ data()?.content?.offer_banner?.banner_1?.status ? 'col-md-6' : 'col-12' }}">
-        <app-image-link [image]="data()?.content?.offer_banner?.banner_2" [bgImage]="true" />
-      </div>
-      }
-    </div>
-  </div>
-</section>
-<!-- Banner Section End -->
-
-<!-- Product slider Start -->
+<!-- Exclusive Products Start -->
 @if(data()?.content?.products_list?.status){
-<section class="section-b-space tools_product ratio_asos">
+<section class="section-b-space tools_product">
   <div class="container">
     <app-theme-title [title]="data()?.content?.products_list" [type]="'standard'" />
-    <app-theme-product
-      [productIds]="data()?.content?.products_list?.product_ids || []"
+    <app-theme-product-tab-section
+      [categoryIds]="data()?.content?.products_list?.category_ids"
       [style]="'vertical'"
-      [slider]="true"
+      [slider]="false"
+      [showItems]="5"
+      [class]="'row row-cols-xxl-5 row-cols-xl-4 row-cols-md-3 row-cols-2 g-sm-4 g-3'"
     />
   </div>
 </section>
 }
-<!-- Product slider end -->
+<!-- Exclusive Products End -->
 
-<!-- Blog Section Start -->
-@if(data()?.content?.featured_blogs?.status){
-<section class="blog ratio3_2 pt-0 section-b-space">
-  <div class="container border-section border-bottom-0">
-    <div class="row section-t-space">
-      <div class="col-md-12">
-        <app-theme-title [title]="data()?.content?.featured_blogs" [type]="'standard'" />
-        <app-theme-blog [blogIds]="data()?.content?.featured_blogs?.blog_ids || []" />
-      </div>
-    </div>
+<!-- Everyday Casual Start -->
+@if(data()?.content?.everyday_casual?.status){
+<section class="section-b-space tools_product">
+  <div class="container">
+    <app-theme-title [title]="data()?.content?.everyday_casual" [type]="'standard'" />
+    <app-theme-product-tab-section
+      [categoryIds]="data()?.content?.everyday_casual?.category_ids"
+      [style]="'vertical'"
+      [slider]="false"
+      [showItems]="5"
+      [class]="'row row-cols-xxl-5 row-cols-xl-4 row-cols-md-3 row-cols-2 g-sm-4 g-3'"
+    />
   </div>
 </section>
 }
-<!-- Blog Section End -->
+<!-- Everyday Casual End -->
 
 <!-- Brand Section Start -->
 @if(data()?.content?.brand?.status){

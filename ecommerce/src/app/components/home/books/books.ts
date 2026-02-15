@@ -6,18 +6,14 @@ import { forkJoin, of } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 import { Categories } from '../../../shared/components/widgets/categories/categories';
-import { ImageLink } from '../../../shared/components/widgets/image-link/image-link';
 import { IBooks } from '../../../shared/interface/theme.interface';
 import { ThemeOptionService } from '../../../shared/services/theme-option.service';
-import { GetBlogsAction } from '../../../shared/store/action/blog.action';
 import { GetBrandsAction } from '../../../shared/store/action/brand.action';
 import { GetCategoriesAction } from '../../../shared/store/action/category.action';
 import { GetProductByIdsAction } from '../../../shared/store/action/product.action';
-import { ThemeBlog } from '../widgets/theme-blog/theme-blog';
 import { ThemeBrand } from '../widgets/theme-brand/theme-brand';
 import { ThemeFourColumnProduct } from '../widgets/theme-four-column-product/theme-four-column-product';
 import { ThemeHomeSlider } from '../widgets/theme-home-slider/theme-home-slider';
-import { ThemeProduct } from '../widgets/theme-product/theme-product';
 import { ThemeProductTabSection } from '../widgets/theme-product-tab-section/theme-product-tab-section';
 import { ThemeTitle } from '../widgets/theme-title/theme-title';
 
@@ -29,9 +25,6 @@ import { ThemeTitle } from '../widgets/theme-title/theme-title';
     ThemeTitle,
     ThemeProductTabSection,
     ThemeFourColumnProduct,
-    ImageLink,
-    ThemeProduct,
-    ThemeBlog,
     ThemeBrand,
   ],
   templateUrl: './books.html',
@@ -56,12 +49,13 @@ export class Books {
     const data = this.data();
     if (data?.slug == this.slug()) {
       let categoryIds = [
-        ...new Set(
-          data?.content?.categories_1?.category_ids.concat(
-            data.content.category_product.category_ids,
-            data?.content?.categories_2?.category_ids,
-          ),
-        ),
+        ...new Set([
+          ...(data?.content?.categories_1?.category_ids || []),
+          ...(data?.content?.category_product?.category_ids || []),
+          ...(data?.content?.categories_2?.category_ids || []),
+          ...(data?.content?.products_list?.category_ids || []),
+          ...(data?.content?.everyday_casual?.category_ids || []),
+        ]),
       ];
 
       // Get Products
@@ -100,22 +94,6 @@ export class Books {
         getCategory$ = of(null);
       }
 
-      // Get Blog
-      let getBlog$;
-      if (
-        data?.content?.featured_blogs?.blog_ids?.length &&
-        data?.content?.featured_blogs?.status
-      ) {
-        getBlog$ = this.store.dispatch(
-          new GetBlogsAction({
-            status: 1,
-            ids: data?.content?.featured_blogs?.blog_ids?.join(','),
-          }),
-        );
-      } else {
-        getBlog$ = of(null);
-      }
-
       // Get Brand
       let getBrands$;
       if (data?.content?.brand?.brand_ids?.length && data?.content?.brand?.status) {
@@ -132,7 +110,7 @@ export class Books {
       // Skeleton Loader
       if (this.platformId) {
         document.body.classList.add('skeleton-body');
-        forkJoin([getProducts$, getCategory$, getBrands$, getBlog$]).subscribe({
+        forkJoin([getProducts$, getCategory$, getBrands$]).subscribe({
           complete: () => {
             document.body.classList.remove('skeleton-body');
             this.themeOptionService.preloader = false;

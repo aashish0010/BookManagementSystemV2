@@ -44,26 +44,6 @@
                 149
             ]
         },
-        "offer_banner": {
-            "banner_1": {
-                "status": true,
-                "image_url": "/images/theme/book/book_3.png",
-                "redirect_link": {
-                    "link": 424,
-                    "link_type": "product",
-                    "product_ids": 424
-                }
-            },
-            "banner_2": {
-                "status": true,
-                "image_url": "/images/theme/book/book_2.png",
-                "redirect_link": {
-                    "link": 420,
-                    "link_type": "product",
-                    "product_ids": 420
-                }
-            }
-        },
         "products_ids": [
             412,
             424,
@@ -78,24 +58,21 @@
         ],
         "products_list": {
             "tag": "exclusive products",
-            "title": "special products",
+            "title": "exclusive products",
             "status": true,
-            "product_ids": [
-                421,
-                420,
-                313,
-                310,
-                309
+            "category_ids": [
+                99,
+                100
             ]
         },
-        "featured_blogs": {
-            "tag": "recent stroy",
-            "title": "latest blog",
+        "everyday_casual": {
+            "tag": "everyday casual",
+            "title": "everyday casual",
             "status": true,
-            "blog_ids": [
-                31,
-                32,
-                33
+            "category_ids": [
+                99,
+                100,
+                101
             ]
         },
         "slider_products": {
