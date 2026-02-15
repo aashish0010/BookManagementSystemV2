@@ -39,7 +39,7 @@
                 <ng-container>
                   @for(menu of menus; track menu.id){
                   <li
-                    [ngClass]="[menu.link_type === 'sub' && menu.child ? 'nav-item dropdown' : 'nav-item', menu.mega_menu ? 'dropdown-mega' : '']"
+                    [ngClass]="[menu.link_type === 'sub' && getMenuChildren(menu).length ? 'nav-item dropdown' : 'nav-item', menu.mega_menu ? 'dropdown-mega' : '']"
                     [class.new-nav-item]="menu.badge_text"
                   >
                     @if(menu.link_type === 'sub'){
@@ -188,10 +188,10 @@
                         }
                       </div>
                     </div>
-                    } @if(menu.child && !menu.mega_menu){
+                    } @if(getMenuChildren(menu).length && !menu.mega_menu){
                     <ul class="dropdown-menu" [class.show]="menu.active">
                       <ng-container
-                        *ngTemplateOutlet="recursiveMenu; context: { $implicit: menu.child }"
+                        *ngTemplateOutlet="recursiveMenu; context: { $implicit: getMenuChildren(menu) }"
                       />
                     </ul>
                     }
