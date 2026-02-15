@@ -1,0 +1,18 @@
+:host ::ng-deep .bg-img {
+  width: 100%;
+  height: clamp(260px, 32vw, 520px);
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+:host ::ng-deep .bg-size {
+  min-height: clamp(260px, 32vw, 520px);
+  background-size: cover;
+  background-position: center;
+}
+
+:host ::ng-deep .banner-contain {
+  display: block;
+  height: clamp(260px, 32vw, 520px);
+}

@@ -22,6 +22,100 @@ namespace BookManagementSystem.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BookManagementSystem.Domain.Entities.Company.CompanyDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CompanyCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("CompanyDescription")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("CompanyEmail")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("CompanyPhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("OperationsDate")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CompanyDetails");
+                });
+
+            modelBuilder.Entity("BookManagementSystem.Domain.Entities.Company.CompanyService", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CompanyInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyInfoId");
+
+                    b.ToTable("CompanyServices");
+                });
+
+            modelBuilder.Entity("BookManagementSystem.Domain.Entities.Company.CompanySocialInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CompanyInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SocialMediaDesc")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("SocialMediaLink")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SocialMediaName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyInfoId");
+
+                    b.ToTable("CompanySocialInfos");
+                });
+
             modelBuilder.Entity("BookManagementSystem.Domain.Entities.OtpHandler", b =>
                 {
                     b.Property<Guid>("Id")
@@ -51,7 +145,7 @@ namespace BookManagementSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OtpManager");
+                    b.ToTable("OtpManagers");
                 });
 
             modelBuilder.Entity("BookManagementSystem.Domain.Entities.ThirdPartyAuth", b =>
@@ -59,6 +153,9 @@ namespace BookManagementSystem.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CompanyInfoId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
@@ -84,7 +181,9 @@ namespace BookManagementSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ThirdPartyLoginHandler");
+                    b.HasIndex("CompanyInfoId");
+
+                    b.ToTable("ThirdPartyLoginHandlers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -298,6 +397,9 @@ namespace BookManagementSystem.Infrastructure.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
+                    b.Property<int>("CompanyInfoId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -331,7 +433,42 @@ namespace BookManagementSystem.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.HasIndex("CompanyInfoId");
+
                     b.HasDiscriminator().HasValue("User");
+                });
+
+            modelBuilder.Entity("BookManagementSystem.Domain.Entities.Company.CompanyService", b =>
+                {
+                    b.HasOne("BookManagementSystem.Domain.Entities.Company.CompanyDetail", "CompanyInfo")
+                        .WithMany()
+                        .HasForeignKey("CompanyInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompanyInfo");
+                });
+
+            modelBuilder.Entity("BookManagementSystem.Domain.Entities.Company.CompanySocialInfo", b =>
+                {
+                    b.HasOne("BookManagementSystem.Domain.Entities.Company.CompanyDetail", "CompanyInfo")
+                        .WithMany()
+                        .HasForeignKey("CompanyInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompanyInfo");
+                });
+
+            modelBuilder.Entity("BookManagementSystem.Domain.Entities.ThirdPartyAuth", b =>
+                {
+                    b.HasOne("BookManagementSystem.Domain.Entities.Company.CompanyDetail", "CompanyInfo")
+                        .WithMany()
+                        .HasForeignKey("CompanyInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompanyInfo");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -383,6 +520,17 @@ namespace BookManagementSystem.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("BookManagementSystem.Infrastructure.User", b =>
+                {
+                    b.HasOne("BookManagementSystem.Domain.Entities.Company.CompanyDetail", "CompanyInfo")
+                        .WithMany()
+                        .HasForeignKey("CompanyInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompanyInfo");
                 });
 #pragma warning restore 612, 618
         }

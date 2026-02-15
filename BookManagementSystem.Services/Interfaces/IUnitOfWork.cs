@@ -9,5 +9,6 @@ namespace BookManagementSystem.Service.Interfaces
 		TokenService tokenService { get; }
 		EmailManagerService mailService { get; }
         DbHelperService dbHelperService { get; }
+		CommonService commonService { get; }
     }
 }

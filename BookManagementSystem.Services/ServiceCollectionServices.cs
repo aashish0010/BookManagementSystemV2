@@ -5,13 +5,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BookManagementSystem.Service
 {
-	public static class ServiceCollectionServices
-	{
-		public static IServiceCollection ServiceServices(this IServiceCollection services, IConfiguration configuration)
-		{
-			services.AddScoped<IUnitOfWork, UnitOfWork>();
-			services.AddHttpContextAccessor();
-			return services;
-		}
-	}
+    public static class ServiceCollectionServices
+    {
+        public static IServiceCollection ServiceServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ICommonService, CommonService>();
+            services.AddHttpContextAccessor();
+            return services;
+        }
+    }
 }

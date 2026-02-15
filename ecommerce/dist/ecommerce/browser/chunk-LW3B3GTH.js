@@ -1,0 +1,1 @@
+import{A as r}from"./chunk-WP4IXCKC.js";import{ca as i,ha as o}from"./chunk-QO6UZDQK.js";var p=(()=>{class t{constructor(){this.http=o(r),this.confirmed=!1,this.isLogin=!1}static{this.\u0275fac=function(e){return new(e||t)}}static{this.\u0275prov=i({token:t,factory:t.\u0275fac,providedIn:"root"})}}return t})();export{p as a};

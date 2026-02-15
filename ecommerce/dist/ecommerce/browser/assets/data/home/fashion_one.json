@@ -1,0 +1,194 @@
+{
+    "id":  1,
+    "content":  {
+                    "brand":  {
+                                  "status":  true,
+                                  "brand_ids":  [
+                                                    8,
+                                                    7,
+                                                    6,
+                                                    10,
+                                                    9
+                                                ]
+                              },
+                    "banner":  {
+                                   "status":  true,
+                                   "image_url":  "/images/theme/fashion_one/fashion_one_5.png",
+                                   "redirect_link":  {
+                                                         "link":  19,
+                                                         "link_type":  "product",
+                                                         "product_ids":  19
+                                                     }
+                               },
+                    "services":  {
+                                     "banners":  [
+                                                     {
+                                                         "title":  "free shipping",
+                                                         "status":  true,
+                                                         "image_url":  "/images/theme/fashion_one/service.png",
+                                                         "description":  "free shipping world wide"
+                                                     },
+                                                     {
+                                                         "title":  "24 X 7 service",
+                                                         "status":  true,
+                                                         "image_url":  "/images/theme/fashion_one/service.png",
+                                                         "description":  "online service for new customer"
+                                                     },
+                                                     {
+                                                         "title":  "festival offer",
+                                                         "status":  true,
+                                                         "image_url":  "/images/theme/fashion_one/service.png",
+                                                         "description":  "new online special festival offer"
+                                                     }
+                                                 ]
+                                 },
+                    "home_banner":  {
+                                        "banners":  [
+                                                        {
+                                                            "status":  true,
+                                                            "image_url":  "/images/company/slide_1.png",
+                                                            "redirect_link":  {
+                                                                                  "link":  "",
+                                                                                  "link_type":  "external_url"
+                                                                              }
+                                                        },
+                                                        {
+                                                            "status":  true,
+                                                            "image_url":  "/images/company/slide_2.png",
+                                                            "redirect_link":  {
+                                                                                  "link":  "",
+                                                                                  "link_type":  "external_url"
+                                                                              }
+                                                        }
+                                                    ]
+                                    },
+                    "offer_banner":  {
+                                         "banner_1":  {
+                                                          "status":  true,
+                                                          "image_url":  "/images/company/flight_1.jpg",
+                                                          "redirect_link":  {
+                                                                                "link":  "fashion",
+                                                                                "link_type":  "collection"
+                                                                            }
+                                                      },
+                                         "banner_2":  {
+                                                          "status":  true,
+                                                          "image_url":  "/images/company/flight_2.jpg",
+                                                          "redirect_link":  {
+                                                                                "link":  "fashion",
+                                                                                "link_type":  "collection"
+                                                                            }
+                                                      }
+                                     },
+                    "products_ids":  [
+                                         21,
+                                         16,
+                                         15,
+                                         12,
+                                         19
+                                     ],
+                    "social_media":  {
+                                         "title":  "#WOWEBAZAAR",
+                                         "status":  true,
+                                         "banners":  [
+                                                         {
+                                                             "status":  true,
+                                                             "image_url":  "/images/company/insta_1.jpeg",
+                                                             "redirect_link":  {
+                                                                                   "link":  "https://www.instagram.com/wow_ebazaar",
+                                                                                   "link_type":  "external_url"
+                                                                               }
+                                                         },
+                                                         {
+                                                             "status":  true,
+                                                             "image_url":  "/images/company/insta_2.jpeg",
+                                                             "redirect_link":  {
+                                                                                   "link":  "https://www.instagram.com/wow_ebazaar",
+                                                                                   "link_type":  "external_url"
+                                                                               }
+                                                         },
+                                                         {
+                                                             "status":  true,
+                                                             "image_url":  "/images/company/insta_3.jpeg",
+                                                             "redirect_link":  {
+                                                                                   "link":  "https://www.instagram.com/wow_ebazaar",
+                                                                                   "link_type":  "external_url"
+                                                                               }
+                                                         },
+                                                         {
+                                                             "status":  true,
+                                                             "image_url":  "/images/company/insta_4.jpeg",
+                                                             "redirect_link":  {
+                                                                                   "link":  "https://www.instagram.com/wow_ebazaar",
+                                                                                   "link_type":  "external_url"
+                                                                               }
+                                                         },
+                                                         {
+                                                             "status":  true,
+                                                             "image_url":  "/images/company/insta_5.jpeg",
+                                                             "redirect_link":  {
+                                                                                   "link":  "https://www.instagram.com/wow_ebazaar",
+                                                                                   "link_type":  "external_url"
+                                                                               }
+                                                         },
+                                                         {
+                                                             "status":  true,
+                                                             "image_url":  "/images/company/insta_6.jpeg",
+                                                             "redirect_link":  {
+                                                                                   "link":  "https://www.instagram.com/wow_ebazaar",
+                                                                                   "link_type":  "external_url"
+                                                                               }
+                                                         },
+                                                         {
+                                                             "status":  true,
+                                                             "image_url":  "/images/company/insta_7.jpeg",
+                                                             "redirect_link":  {
+                                                                                   "link":  "https://www.instagram.com/wow_ebazaar",
+                                                                                   "link_type":  "external_url"
+                                                                               }
+                                                         },
+                                                         {
+                                                             "status":  true,
+                                                             "image_url":  "/images/company/insta_8.jpeg",
+                                                             "redirect_link":  {
+                                                                                   "link":  "https://www.instagram.com/wow_ebazaar",
+                                                                                   "link_type":  "external_url"
+                                                                               }
+                                                         }
+                                                     ]
+                                     },
+                    "products_list":  {
+                                          "tag":  "special offer",
+                                          "title":  "Latest Drops",
+                                          "status":  true,
+                                          "description":  "Looking for the latest trends in clothing, shoes and accessories? Welcome to our \u0027Latest Drops\u0027 edit, bringing you all the latest styles from all your fave brands.",
+                                          "product_ids":  [
+                                                              21,
+                                                              16,
+                                                              15,
+                                                              12
+                                                          ]
+                                      },
+                    "featured_blogs":  {
+                                           "tag":  "From the Blog",
+                                           "title":  "From the Blog",
+                                           "status":  true,
+                                           "blog_ids":  [
+                                                            3,
+                                                            2,
+                                                            1
+                                                        ]
+                                       },
+                    "category_product":  {
+                                             "tag":  "exclusive products",
+                                             "title":  "everyday casual",
+                                             "status":  true,
+                                             "category_ids":  [
+                                                                  8,
+                                                                  9,
+                                                                  10
+                                                              ]
+                                         }
+                },
+    "slug":  "fashion_one"
+}

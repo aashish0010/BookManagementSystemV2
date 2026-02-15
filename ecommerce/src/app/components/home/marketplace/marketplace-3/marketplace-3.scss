@@ -1,0 +1,21 @@
+.sidebar-banner-list {
+  display: grid;
+  gap: 12px;
+}
+
+.sidebar-banner-list img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+:host ::ng-deep .banner-section .collection-banner .bg-size {
+  min-height: clamp(180px, 20vw, 280px);
+  background-size: cover;
+  background-position: center;
+}
+
+:host ::ng-deep .banner-section .collection-banner {
+  display: block;
+  overflow: hidden;
+}

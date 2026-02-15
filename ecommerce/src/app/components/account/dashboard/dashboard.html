@@ -1,0 +1,173 @@
+<div class="company-dashboard">
+  @if(errorMessage){
+  <div class="dashboard-state error">
+    <div class="state-icon">
+      <i class="ri-error-warning-line"></i>
+    </div>
+    <h4>Unable to load company details</h4>
+    <p>{{ errorMessage }}</p>
+  </div>
+  } @else if(company$ | async; as company){
+  <div class="hero">
+    <div class="hero-copy">
+      <span class="company-pill">
+        Company Code
+        <strong>{{ company.companyDetail?.companyCode }}</strong>
+      </span>
+      <h2 class="hero-title font-fraunces">{{ company.companyDetail?.companyName }}</h2>
+      <p class="hero-description">
+        {{ company.companyDetail?.companyDescription }}
+      </p>
+      <div class="hero-actions">
+        @if(company.companyDetail?.companyPhoneNumber){
+        <a class="btn btn-solid" [href]="getPhoneLink(company.companyDetail?.companyPhoneNumber)">
+          <i class="ri-phone-line"></i>
+          Call
+        </a>
+        }
+        @if(company.companyDetail?.companyEmail){
+        <a class="btn btn-outline" [href]="'mailto:' + company.companyDetail?.companyEmail">
+          <i class="ri-mail-line"></i>
+          Email
+        </a>
+        }
+      </div>
+      <div class="hero-meta">
+        @if(company.companyDetail?.operationsDate){
+        <div class="meta-item">
+          <i class="ri-calendar-2-line"></i>
+          <span>Operating since {{ company.companyDetail?.operationsDate }}</span>
+        </div>
+        }
+        @if(company.companyDetail?.companyPhoneNumber){
+        <div class="meta-item">
+          <i class="ri-customer-service-2-line"></i>
+          <span>{{ company.companyDetail?.companyPhoneNumber }}</span>
+        </div>
+        }
+        @if(company.companyDetail?.companyEmail){
+        <div class="meta-item">
+          <i class="ri-mail-open-line"></i>
+          <span>{{ company.companyDetail?.companyEmail }}</span>
+        </div>
+        }
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="ri-service-line"></i></div>
+        <div>
+          <h3>{{ company.companyServices?.length ?? 0 }}</h3>
+          <p>Active Services</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon accent-2"><i class="ri-share-forward-line"></i></div>
+        <div>
+          <h3>{{ company.companySocialInfos?.length ?? 0 }}</h3>
+          <p>Social Channels</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon accent-3"><i class="ri-briefcase-4-line"></i></div>
+        <div>
+          <h3>{{ company.companyDetail?.operationsDate }}</h3>
+          <p>Operating Since</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon accent-4"><i class="ri-verified-badge-line"></i></div>
+        <div>
+          <h3>{{ company.companyDetail?.companyCode }}</h3>
+          <p>Company Code</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="card-title">
+        <i class="ri-dashboard-3-line"></i>
+        Services Portfolio
+      </div>
+      <div class="service-list">
+        @for(service of company.companyServices ?? []; track service.id){
+        <div class="service-item">
+          <div class="service-icon">
+            <i [class]="getServiceIcon(service?.name)"></i>
+          </div>
+          <div>
+            <h5>{{ service?.name }}</h5>
+            <p>Core offering by {{ company.companyDetail?.companyName }}</p>
+          </div>
+        </div>
+        } @empty {
+        <div class="empty-row">No services listed yet.</div>
+        }
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="card-title">
+        <i class="ri-building-4-line"></i>
+        Company Profile
+      </div>
+      <div class="profile-list">
+        <div class="profile-row">
+          <span>Company Name</span>
+          <strong>{{ company.companyDetail?.companyName }}</strong>
+        </div>
+        <div class="profile-row">
+          <span>Company Code</span>
+          <strong>{{ company.companyDetail?.companyCode }}</strong>
+        </div>
+        <div class="profile-row">
+          <span>Operations Since</span>
+          <strong>{{ company.companyDetail?.operationsDate }}</strong>
+        </div>
+        <div class="profile-row">
+          <span>Support Email</span>
+          <strong>{{ company.companyDetail?.companyEmail }}</strong>
+        </div>
+        <div class="profile-row">
+          <span>Support Phone</span>
+          <strong>{{ company.companyDetail?.companyPhoneNumber }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="card-title">
+        <i class="ri-links-line"></i>
+        Social Presence
+      </div>
+      <div class="social-list">
+        @for(social of company.companySocialInfos ?? []; track social.id){
+        @if(social?.socialMediaLink){
+        <a class="social-item" [href]="social.socialMediaLink" target="_blank" rel="noopener">
+          <i [class]="getSocialIcon(social?.socialMediaName)"></i>
+          <span>{{ social?.socialMediaName }}</span>
+        </a>
+        } @else {
+        <div class="social-item disabled">
+          <i [class]="getSocialIcon(social?.socialMediaName)"></i>
+          <span>{{ social?.socialMediaName }}</span>
+        </div>
+        }
+        } @empty {
+        <div class="empty-row">No social links available.</div>
+        }
+      </div>
+    </div>
+  </div>
+  } @else {
+  <div class="dashboard-state loading">
+    <div class="skeleton skeleton-pill"></div>
+    <div class="skeleton skeleton-title"></div>
+    <div class="skeleton skeleton-line"></div>
+    <div class="skeleton skeleton-line short"></div>
+    <div class="skeleton skeleton-grid"></div>
+  </div>
+  }
+</div>

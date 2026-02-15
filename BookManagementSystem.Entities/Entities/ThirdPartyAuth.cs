@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BookManagementSystem.Domain.Entities.Company;
+using System.ComponentModel.DataAnnotations;
 
 namespace BookManagementSystem.Domain.Entities
 {
@@ -12,5 +13,7 @@ namespace BookManagementSystem.Domain.Entities
 		public string Provider { get; set; }
 		public DateTime CreateDate { get; set; }
 		public DateTime UpdateDate { get; set; }
-	}
+        public int CompanyInfoId { get; set; }
+        public CompanyDetail CompanyInfo { get; set; }
+    }
 }

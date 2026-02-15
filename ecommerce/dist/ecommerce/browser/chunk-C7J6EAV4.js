@@ -1,0 +1,1 @@
+var c=(()=>{class t{static{this.type="[Page] Get"}constructor(s){this.payload=s}}return t})(),a=(()=>{class t{static{this.type="[Page] By Slug"}constructor(s){this.slug=s}}return t})(),o=(()=>{class t{static{this.type="[Faq] Get"}}return t})(),i=(()=>{class t{static{this.type="[ContactUs] Post"}constructor(s){this.payload=s}}return t})();export{c as a,a as b,o as c,i as d};
